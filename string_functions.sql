@@ -1,44 +1,76 @@
---  string functions
+-- String Functions
+
+--  Manipulation                -- Calculation				-- String Extraction
+	-- 1.Concat						-- 1. Len					1.Left
+	-- 2. Upper													2.Right
+	-- 3.Lower													3.Substring
+	-- 4.Replace
+	-- 5.Trim
 
 
--- length() function
- 
-select first_name, length(first_name)
-from parks_and_recreation.employee_demographics
-order by 2
-; 
 
--- upper()
+select 
+	FirstName,
+	Country,
+	concat(FirstName,'-',Country) as name_country
+from Sales.Customers;
 
-select first_name, upper(first_name)
-from parks_and_recreation.employee_demographics
-order by 2
-; 
+select 
+	FirstName,
+	Country,
+	lower(FirstName) as name_lower
+from Sales.Customers;
 
--- substring()  function
+select 
+	FirstName,
+	Country,
+	upper(FirstName) as name_upper
+from Sales.Customers;
 
-select birth_date, substring(birth_date,6,2) as birth_month
-from parks_and_recreation.employee_demographics
-order by 2
-; 
+select 
+	FirstName,
+	Country,
+	concat(FirstName,'-',Country) as name_country,
+	lower(FirstName) as name_lower,
+		upper(Country) as country_upper
+from Sales.Customers;
 
--- replace()
+select
+	FirstName
+from Sales.Customers
+where FirstName != trim(FirstName);
 
-select first_name, replace(first_name, 'a','b'),
-first_name, replace(first_name, 'A','B')
-from parks_and_recreation.employee_demographics
-; 
- 
- 
- -- locate() 
- 
-select first_name, locate('e',first_name)
-from parks_and_recreation.employee_demographics
-; 
+select
+	FirstName,
+	len(FirstName) as length
+from Sales.Customers;
 
--- concatinate()
+select
+'123-456-7890' as phone,
+replace('123-456-7890','-','/');
 
-select first_name, last_name,
-concat(first_name," ",last_name) as full_name
-from parks_and_recreation.employee_demographics
-;  
+
+select
+	FirstName,
+	left(FirstName,2) as first_2_letters
+from Sales.Customers;
+
+
+select
+	FirstName,
+	right(FirstName,2) as last_2_letters
+from Sales.Customers;
+
+
+select
+	FirstName,
+	left(FirstName,2) as first_2_letters,
+	right(FirstName,2) as last_2_letters
+from Sales.Customers;
+
+
+
+select
+	FirstName,
+	SUBSTRING(FirstName,2,len(FirstName))
+from Sales.Customers;
