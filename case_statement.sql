@@ -1,33 +1,115 @@
--- CASE Statement in SQL:
--- The CASE statement allows conditional logic within SQL queries by evaluating conditions and returning specific values when the conditions are met.
--- It works like an if-else construct and can be used in SELECT, WHERE, ORDER BY, and other clauses. 
-
-select first_name,
-last_name,
-age,
+select
+OrderID,
+Sales,
 case
-	when age <=30 then 'young'
-    when age between 31 and 50 then 'old'
-    when age >=50 then 'grandpa'
-end as age_catagory
-from parks_and_recreation.employee_demographics
-;
+	when Sales > 50 then 'High'
+	when Sales > 20 then 'Medium'
+	else 'Low'
+end Category
+from Sales.Orders;
 
--- another example
 
-select * 
-from parks_and_recreation.employee_salary
-;
 
-select first_name,
-last_name,
-salary,
--- occupation, 
+select
+Category,
+sum(Sales) as Total_sales
+From(
+	select
+	OrderID,
+	Sales,
+	case
+		when Sales > 50 then 'High'
+		when Sales > 20 then 'Medium'
+		else 'Low'
+	end Category
+	from Sales.Orders
+)t
+group by Category
+order by Total_sales desc;
+
+
+select
+EmployeeID,
+FirstName,
+LastName,
+Gender,
 case
-	when salary < 50000 then salary + (salary * 0.05)
-    when salary >= 50000 then salary * 1.07
-    when salary > 50000 then salary + (salary * 0.07)
-end as bonus_salaries,
-occupation
-from parks_and_recreation.employee_salary
-; 
+	when Gender = 'F' then 'Female'
+	when Gender = 'M' then 'male'
+end GenderFullText
+from Sales.Employees;
+
+
+select
+CustomerID,
+FirstName,
+LastName,
+Country,
+case
+	when Country = 'Germany' then 'GE'
+	when Country = 'USA' then 'US'
+	else 'n/a'
+end ['countr abbr']
+from Sales.Customers;
+
+select
+	CustomerID,
+	FirstName,
+	LastName,
+	Country,
+	case Country
+		when 'Germany' then 'GE'
+		when 'USA' then 'US'
+		else 'n/a'
+	end ['countr abbr2']
+from Sales.Customers;
+
+select distinct Country
+from Sales.Customers;
+
+select
+	CustomerID,
+	FirstName,
+	LastName,
+	Score,
+	case
+		when Score is null then 0
+		else Score
+	end ScoreClean,
+
+	avg(case
+			when Score is null then 0
+			else Score
+		end) over() AvgCustomerScore,
+	avg(Score) over() AvgCustomer
+
+from Sales.Customers;
+
+
+select 
+CustomerID,
+OrderID,
+Sales,
+	case
+		when Sales > 30	then 1
+		else 0
+	end flag
+from Sales.Orders
+order by CustomerID;
+
+
+select
+*
+from Sales.Orders;
+
+select 
+CustomerID,
+	sum(case
+			when Sales > 30	then 1
+			else 0
+	    end) TotalOrderHighSales,
+	count(*) TotalOrders
+from Sales.Orders
+group by CustomerID;
+
+
